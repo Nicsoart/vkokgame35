@@ -135,39 +135,43 @@
     }
 
 // OK
-  function API_callback(method, result, data) {
-    if (method === "showAd") {
-      //unityInstance.SendMessage('AdsManager', 'CloseLoading');
-      if (data === "ad_shown") {
-        unityInstance.SendMessage('AdsManager', 'AdShowed');
-      } else if (data === "no_ads" || data === "call_limit") {
-        //unityInstance.SendMessage('AdsManager', 'TryToLoadFullScreen');
-      }
-
-    } else if (method === "loadAd") {
-      if (data === "ready") {
-        FAPI.UI.showLoadedAd();
-      } else if (data === "empty" || data === "call_limit" || data === "disabled" || data === "no_ads") {
-        //unityInstance.SendMessage('AdsManager', 'CloseLoading');
-        //unityInstance.SendMessage('AdsManager', 'TryToLoadCustomRewardVideo');
-      }
-
-    } else if (method === "showLoadedAd") {
-      //unityInstance.SendMessage('AdsManager', 'CloseLoading');
-      if (data === "complete") {
-        unityInstance.SendMessage('AdsManager', 'GetReward');
-      } else if (data === "not_prepared" || data === "mp4_not_supported") {
-        //unityInstance.SendMessage('AdsManager', 'TryToLoadCustomRewardVideo');
-      }
+function API_callback(method, result, data) {
+  if (method === "showAd") {
+    //unityInstance.SendMessage('AdsManager', 'CloseLoading');
+    if (data === "ad_shown") {
+      unityInstance.SendMessage('AdsManager', 'AdShowed');
+    } else if (data === "no_ads" || data === "call_limit") {
+      //unityInstance.SendMessage('AdsManager', 'TryToLoadFullScreen');
     }
-    else if (method === "joinGroup") {
-      if (data === "already.member") {
-        unityInstance.SendMessage('VKMechanicsController', 'OpenGroup');
-      } else if (data == "group.access.denied" || data == "common.finder") {
-        unityInstance.SendMessage('VKMechanicsController', 'NoGroup');
-      }
+
+  } else if (method === "loadAd") {
+    if (data === "ready") {
+      FAPI.UI.showLoadedAd();
+    } else if (data === "empty" || data === "call_limit" || data === "disabled" || data === "no_ads") {
+      //unityInstance.SendMessage('AdsManager', 'CloseLoading');
+      //unityInstance.SendMessage('AdsManager', 'TryToLoadCustomRewardVideo');
+      FAPI.UI.showAd();
+      unityInstance.SendMessage('AdsManager', 'GetReward');
+    }
+
+  } else if (method === "showLoadedAd") {
+    //unityInstance.SendMessage('AdsManager', 'CloseLoading');
+    if (data === "complete") {
+      unityInstance.SendMessage('AdsManager', 'GetReward');
+    } else if (data === "not_prepared" || data === "mp4_not_supported") {
+      //unityInstance.SendMessage('AdsManager', 'TryToLoadCustomRewardVideo');
+      FAPI.UI.showAd();
+      unityInstance.SendMessage('AdsManager', 'GetReward');
     }
   }
+  else if (method === "joinGroup") {
+    if (data === "already.member") {
+      unityInstance.SendMessage('VKMechanicsController', 'OpenGroup');
+    } else if (data == "group.access.denied" || data == "common.finder") {
+      unityInstance.SendMessage('VKMechanicsController', 'NoGroup');
+    }
+  }
+}
 
   function OKInitialization() {
     var rParams = FAPI.Util.getRequestParameters();
